@@ -218,7 +218,7 @@ latin_america_stats_per_year <- latin_america_stats_per_year %>%
   )
 
 
-# Creating a table by using kable with a caption
+# Creating a table for Latin America by using kable with a caption
 
 kable(latin_america_stats_per_year, 
       col.names = c("Year", "Mean Internet Users", "Min Internet Users", "Max Internet Users"),

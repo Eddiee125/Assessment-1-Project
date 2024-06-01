@@ -1,8 +1,8 @@
 ---
 title: "Internet Usage Among Latin American People"
 author:
-    - name: "Eduard Vargas"
-      affiliation: "**Monash Student ID: 34322450**"
+  - name: "Eduard Vargas"
+    affiliation: "**Monash Student ID: 34322450**"
 date: "2024-06-01"
 output: 
   bookdown::html_document2:
@@ -19,7 +19,7 @@ options(scipen = 999, digits = 10)
 
 
 #### Section 1: Loading the libraries
-```{r}
+```{r Loading the libraries}
 # Loading the libraries
 library(dplyr)
 library(tidyr)
@@ -197,9 +197,42 @@ Followed by Mexico, which is the second country with the highest amount of users
 
 As previously mentioned, in order to perform a general analysis as a group, I will use the mean of users per year for the group.
 
-```{r Grouping and Calculating Mean, echo=TRUE, fig.align='center'}
 
-# Grouping the data by year and calculate the mean, min, and max number of internet users per year
+Now let's see the behavior of the Northern American Countries (USA and Canada for this work).
+
+```{r Grouping USA and Canada Data, fig.align='center'}
+# Grouping USA and Canada for the North American Countries
+
+usa_and_canada <- raw_data %>% 
+  filter(Country %in% c("United States", "Canada")) 
+
+
+# Visualizing the behavior per year 
+
+USA_n_Canda_PYPLOT <- 
+  ggplot(usa_and_canada, aes(x = Year, y = Number_of_Internet_Users, color = Country)) +
+  geom_line() +
+  labs(title = "Number of Internet Users per Year USA vs Canada",
+       x = "Year",
+       y = "Number of Internet Users",
+       color = "Country") +
+  scale_color_manual(values = c("United States" = "blue", "Canada" = "red")) +
+  scale_y_continuous(labels = comma) +
+  theme_minimal()
+
+print(USA_n_Canda_PYPLOT)
+
+```
+
+
+**Observations:**
+
+The growth in Internet users in the USA is significantly higher than in Canada and many other countries, which makes Canada's adoption rate appear modest by comparison. Despite being a well-developed country, Canada's Internet user base is considerably smaller than that of the USA, which is surprising. Nevertheless, Canada is approaching 50 million Internet users, a figure comparable to that of Honduras in the Latin American group, where this number represents the median for the region.
+
+
+```{r Grouping and Calculating Mean, echo=TRUE, fig.align='center', include=FALSE}
+
+# Grouping the data for Latin America by year and calculate the mean, min, and max number of internet users per year
 
 latin_america_stats_per_year <- Latin_America %>%
   group_by(Year) %>%
@@ -220,11 +253,53 @@ latin_america_stats_per_year <- latin_america_stats_per_year %>%
 
 # Creating a table for Latin America by using kable with a caption
 
-kable(latin_america_stats_per_year, 
+LA_table <- kable(latin_america_stats_per_year, 
       col.names = c("Year", "Mean Internet Users", "Min Internet Users", "Max Internet Users"),
       caption = "Summary of Internet Users in Latin American Countries by Year",
       format = "html") %>%
   kable_styling(position = "center", full_width = FALSE, bootstrap_options = c("striped", "hover"))
+
+#----------------------------------
+
+# Grouping the data for USA and Canada by year and calculate the mean, min, and max number of internet users per year
+us_canada_stats_per_year <- usa_and_canada %>%
+  group_by(Year) %>%
+  summarise(
+    Mean_Internet_Users = mean(Number_of_Internet_Users, na.rm = TRUE),
+    Min_Internet_Users = min(Number_of_Internet_Users, na.rm = TRUE),
+    Max_Internet_Users = max(Number_of_Internet_Users, na.rm = TRUE)
+  )
+
+# Format numbers with commas
+us_canada_stats_per_year <- us_canada_stats_per_year %>%
+  mutate(
+    Mean_Internet_Users = formatC(Mean_Internet_Users, format = "f", big.mark = ",", digits = 0),
+    Min_Internet_Users = formatC(Min_Internet_Users, format = "f", big.mark = ",", digits = 0),
+    Max_Internet_Users = formatC(Max_Internet_Users, format = "f", big.mark = ",", digits = 0)
+  )
+
+ # Creating the table using kable with a caption
+
+
+USA_CA_table <-
+kable(us_canada_stats_per_year, 
+      col.names = c("Year", "Mean Internet Users", "Min Internet Users", "Max Internet Users"),
+      caption = "Summary of Internet Users in United States and Canada by Year",
+      format = "html") %>%
+  kable_styling(position = "center", full_width = FALSE, bootstrap_options = c("striped", "hover"))
+
+
+```
+
+
+
+
+```{r}
+# Display tables side by side
+htmltools::tagList(
+  htmltools::div(style = "display: inline-block; width: 49%;", LA_table),
+  htmltools::div(style = "display: inline-block; width: 49%;", USA_CA_table)
+)
 ```
 
 

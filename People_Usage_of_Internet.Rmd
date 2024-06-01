@@ -12,7 +12,8 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+# Setting up Global Instructions:
+knitr::opts_chunk$set(echo = TRUE, include = TRUE, message = FALSE, warning = FALSE)
 ```
 
 
@@ -21,6 +22,8 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 # Loading the libraries
 library(dplyr)
 library(tidyr)
+library(knitr)
+library(kableExtra)
 ```
 
 
@@ -40,7 +43,7 @@ On this short data set, the variables contained are the following:
 raw_data <- read.csv("number-of-internet-users.csv",header = TRUE)
 ```
 
-```{r Arranging the names for presentation}
+```{r Arranging the names for presentation, echo=TRUE, include=FALSE}
 raw_data <- raw_data %>%
         rename(Country = Entity,
                Country_Code = Code,
@@ -48,18 +51,73 @@ raw_data <- raw_data %>%
 
 ```
 
+```{r}
+# Creating a new table with the count of distinct countries
+countries_count <- raw_data %>%
+  summarise(Count = n_distinct(Country)) %>%
+  mutate(Countries = "Number of Countries") %>%
+  select(Countries, Count)
+```
 
 
-* **Variables:**
+
+**Variables:**
+
+The following are the variables contained in the Data Set:
+```{r Display Variables}
+# Displaying the variables:
+
+print(colnames(raw_data))
+```
+
+
+
+* **Country:** 
+Refers to the 224 distinct Countries contained in the original Data Set.
+```{r counting the distinc countries}
+
+# Creating a new table with the count of distinct countries
+new_table <- raw_data %>%
+  summarise(Count = n_distinct(Country)) %>%
+  mutate(Row = "Number of Countries") %>%
+  select(Row, Count)
+
+# Displaying the table
+kable(new_table, col.names = c("Description", "Count"), caption = "Summary of Data")
+
+```
+
+
+
+* **Country_Code:** 
+
+Refers to the specific code allocated for each country
+
+* **Year:** 
+
+Refers to the Years contained.This data contained year 1990 to 2020
+
+```{r Min and Max Years}
+# Calculate the minimum and maximum years
+min_year <- min(raw_data$Year, na.rm = TRUE)
+max_year <- max(raw_data$Year, na.rm = TRUE)
+
+# Create a data frame with these values
+min_max_years <- data.frame(
+  `Min and Max Years` = c("Minimum Year", "Maximum Year"),
+  Year = c(min_year, max_year)
+)
+
+# Display the data frame:
+kable(min_max_years, col.names = c("Description", "Year"), caption = "Minimum and Maximum Years") %>%
+  kable_styling(position = "center")
+```
 
 
 
 
 
-
-
-
-## Including Plots
+### Section 4: Data set description
 
 You can also embed plots, for example:
 

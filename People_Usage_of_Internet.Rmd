@@ -41,7 +41,7 @@ Given that technological advancements are often first adopted in developed count
 #### Data set introduction:
 
 
-The data set extracted form [Our World in Data](https://ourworldindata.org/internet).
+The data set extracted form [Our World in Data](https://ourworldindata.org/internet) (For the citation, please see the last part of this work).
 This is an organisation that focuses on making research and data on major global issues like poverty, disease, hunger, climate change, war, existential risks, and inequality accessible and understandable to promote progress.
 
 On this short data set, the variables contained are the following:
@@ -297,7 +297,6 @@ kable(us_canada_stats_per_year,
 
 ```{r}
 # Display tables side by side
-# Display tables side by side
 div(
   style = "display: flex; justify-content: space-between;",
   div(style = "width: 45%;", HTML(LA_table)),
@@ -306,4 +305,82 @@ div(
 ```
 
 
+**Observations:**
 
+We can observe that comparatively, the growth in the amount of users in the Northern part of the American continent (Mainly driven by USA) is substantial, and despite being a vast country, it's growth never stopped (5 to 10 Million users more per year) with exception on the years 2012 to 2014 , where for some reason there was a decrease in the amount of users, whereas Latin America kept growing.
+
+
+Visually, the growth between both groups will look like this:
+
+```{r visualising growth on both groups, fig.align='center'}
+# Joining both groups together in a single data set
+# Selecting the columns Year and Mean_Internet_Users from both data frames
+latin_america_selected <- latin_america_stats_per_year %>%
+  select(Year, Mean_Internet_Users)
+
+us_canada_selected <- us_canada_stats_per_year %>%
+  select(Year, Mean_Internet_Users)
+
+# Performing the join on the 'Year' column
+LA_n_N <- latin_america_selected %>%
+  left_join(us_canada_selected, by = "Year", suffix = c("_Latin_America", "_USA_CDA"))
+
+
+# Renaming the columns for easier differentiation
+
+LA_n_N <- LA_n_N %>% rename(
+  Latin_America = Mean_Internet_Users_Latin_America,
+  USA_CDA = Mean_Internet_Users_USA_CDA
+)
+
+# Passing to numeric in order to plot
+
+LA_n_N <- LA_n_N %>%
+  mutate(
+    Latin_America = as.numeric(gsub(",","",Latin_America)),
+    USA_CDA = as.numeric(gsub(",","",USA_CDA))
+  )
+
+# Creating the visualization:
+  
+LA_n_N_plot <- 
+  ggplot(LA_n_N, aes(x = Year)) +
+  geom_point(aes(y = Latin_America, color = 'Latin America')) +
+  geom_point(aes(y = USA_CDA, color = 'USA and Canada')) +
+  labs(title = "Mean of Internet Users per Year for the group",
+       x = "Year",
+       y = "Number of users",
+       color = "Group/Region") +
+  scale_y_continuous(labels = scales :: comma) +
+  theme_minimal()
+
+print(LA_n_N_plot)
+
+
+```
+
+* **Observations:**
+
+1) _As expected, and complementing the information from the table, it is clear that not only the start but the growth in the number of users adopting the Internet to their lifes is significantly higher in the northern countries, where ; as mentioned at the beginning of this work; these countries have a vast variety of factors that allow and promote this kind of behavior and expansion._
+
+
+2) _Looking a little in detail to the behavior year by year, if well the Latin American number of Internet users did not diminish during the years 2012 -2014 like the Northern counterpart, it well did slow down compared to previous year. It will interesting to compare the metrics with economic growth and compare if this could have had a relationship._
+
+
+3) _Historical interesting fact is that in 1990, where there were 0 Internet adopters in Latin America, North America already had over a million people already navigating the web and working around it._
+
+
+
+### Conclusions:
+
+Conclusion
+The journey of Internet adoption from 1990 to 2020 unveils a compelling narrative of digital divide and growth. In North America, led by the USA, the Internet saw explosive uptake right from the early 90s, with over a million users online in 1990 alone. This early adoption set the stage for continuous and significant growth, averaging millions of new users each year. By contrast, Latin America's digital story started more modestly. With virtually no users in 1990, the region's Internet usage began to pick up pace only later, reflecting broader socio-economic challenges and infrastructural gaps.
+
+Despite being a well-developed country, Canada's Internet adoption, though substantial, paled in comparison to the USA, highlighting a curious lag within North America itself. Latin America's growth, though slower, was steady and relentless, marking an impressive rise from mere hundreds to millions of users. By 2020, the region approached 50 million users, showcasing resilience and gradual digital integration.
+
+These patterns underscore the profound influence of economic capacity, infrastructure, and policy on technological adoption. North America's rapid and vast Internet growth stands as a testament to early investment and socio-economic readiness, while Latin America's story reflects a determined climb towards digital inclusion, setting the stage for future potential and growth.
+
+
+### Citations:
+
+* International Telecommunication Union (via World Bank); Gapminder (2019); UN (2022); HYDE (2017); Gapminder (Systema Globalis) – processed by Our World in Data. “Number of Internet users” [dataset]. International Telecommunication Union (via World Bank); Gapminder (2019); UN (2022); HYDE (2017); Gapminder (Systema Globalis) [original data].

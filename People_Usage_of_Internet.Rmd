@@ -14,6 +14,7 @@ output:
 ```{r setup, include=FALSE}
 # Setting up Global Instructions:
 knitr::opts_chunk$set(echo = TRUE, include = TRUE, message = FALSE, warning = FALSE)
+options(scipen = 999)
 ```
 
 
@@ -24,6 +25,11 @@ library(dplyr)
 library(tidyr)
 library(knitr)
 library(kableExtra)
+library(ggplot2)
+library(scales)
+library(RColorBrewer)
+library(viridis)
+
 ```
 
 
@@ -124,7 +130,7 @@ Refers to the number of people using (having access) to internet for each year a
 The dataset raw_data provides insights into internet usage across different countries. It comprises 6,406 entries, with each entry detailing a specific country, its corresponding code, the year, and the number of internet users. The dataset spans from 1990 to 2020. The number of internet users ranges widely, from 0 to an astounding 4.7 billion, reflecting the exponential growth of internet adoption over the years. The median year in the dataset is 2005, with key statistical quartiles at 1997 and 2012, highlighting significant periods in the dataset's timeline.
 
 
-```{r Inserting summary Image, pressure, echo=FALSE}
+```{r Inserting summary Image, pressure, echo=FALSE, fig.align='center'}
 knitr::include_graphics("summary(raw_data).png")
 ```
 
@@ -144,6 +150,44 @@ str(raw_data)
 In order to resolve the question, I will group the Latin American Countries, and the Northern ones. Subsequently, I will take the mean for each year between these 2 groups and I will compare by year. This will provide an general glimpse on the difference in growth and behavior throughout these time.
 
 ```{r Grouping Latin American Countries}
+# List of Latin American Countries:
+
+latin_american_countries <- c("Argentina","Belize","Bolivia",
+                              "Brazil","Chile","Colombia","Costa Rica", 
+                              "Cuba", "Dominican Republic", "Ecuador", 
+                              "El Salvador","Guatemala","Haiti", "Honduras", 
+                              "Jamaica", "Mexico", "Nicaragua","Panama", "Paraguay",
+                              "Peru","Puerto Rico", "Suriname", "Trinidad and Tobago",
+                              "Uruguay", "Venezuela")
+
+# Filter the data to include only Latin American countries
+Latin_America <- raw_data %>%
+  filter(Country %in% latin_american_countries)
+
+```
+
+
+```{r Looking at the Latin America behaviour, echo=TRUE, fig.width=10}
+# Define a subtle color palette
+custom_palette <- c("aquamarine", "azure", "beige", "bisque", "blue",
+                    "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse",
+                    "chocolate", "coral", "cornflowerblue", "cyan", "darkgoldenrod",
+                    "darkgreen", "darkkhaki", "darkmagenta", "darkorange", "darkred",
+                    "deepskyblue", "dodgerblue", "firebrick", "forestgreen", "gold")
+
+# Plotting the individual data:
+Latino_ind_stats <- ggplot(Latin_America, aes(x = Year, y = Number_of_Internet_Users, color = Country)) +
+  geom_line() +
+  scale_color_manual(values = custom_palette) +
+  labs(title = "Number of Internet Users per Year in Latin American Countries",
+       x = "Year",
+       y = "Number of Internet Users",
+       color = "Country") +
+    scale_y_continuous(labels = comma) +
+  theme_minimal()
+
+# Display the plot
+print(Latino_ind_stats)
 
 ```
 

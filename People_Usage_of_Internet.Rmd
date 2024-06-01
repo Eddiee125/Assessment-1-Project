@@ -113,16 +113,39 @@ kable(min_max_years, col.names = c("Description", "Year"), caption = "Minimum an
   kable_styling(position = "center")
 ```
 
+* **Number_of_Internet_Users:** 
 
+Refers to the number of people using (having access) to internet for each year according to the statistics in the data set.
 
 
 
 ### Section 4: Data set description
 
-You can also embed plots, for example:
+The dataset raw_data provides insights into internet usage across different countries. It comprises 6,406 entries, with each entry detailing a specific country, its corresponding code, the year, and the number of internet users. The dataset spans from 1990 to 2020. The number of internet users ranges widely, from 0 to an astounding 4.7 billion, reflecting the exponential growth of internet adoption over the years. The median year in the dataset is 2005, with key statistical quartiles at 1997 and 2012, highlighting significant periods in the dataset's timeline.
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+
+```{r Inserting summary Image, pressure, echo=FALSE}
+knitr::include_graphics("summary(raw_data).png")
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+**Data types:**
+
+The Raw data contains the following formats:
+
+```{r data formats, fig.align='center'}
+str(raw_data)
+
+```
+
+
+### Section 5: Data summary
+
+
+In order to resolve the question, I will group the Latin American Countries, and the Northern ones. Subsequently, I will take the mean for each year between these 2 groups and I will compare by year. This will provide an general glimpse on the difference in growth and behavior throughout these time.
+
+```{r Grouping Latin American Countries}
+
+```
+
+
+

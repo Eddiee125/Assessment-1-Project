@@ -1,23 +1,63 @@
 ---
-title: "People usage of Internet"
-author: "Eduard Vargas"
+title: "Internet Usage Among Latin American People"
+author:
+    - name: "Eduard Vargas"
+      affiliation: "**Monash Student ID: 34322450**"
 date: "2024-06-01"
-output: html_document
+output: 
+  bookdown::html_document2:
+    number_sections: false
+  bookdown::pdf_document2:
+    number_sections: false
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+#### Section 1: Loading the libraries
+```{r}
+# Loading the libraries
+library(dplyr)
+library(tidyr)
 ```
+
+
+#### Section 2: Research Question
+
+Given that technological advancements are often first adopted in developed countries with the necessary resources and infrastructure, this is not typically the case for Latin American countries. What has been the growth in internet usage among people in Latin America from 1990 to the present, and how does it compare to that of a first-world country?
+
+#### Data set introduction:
+
+
+The data set extracted form [Our World in Data](https://ourworldindata.org/internet).
+This is an organisation that focuses on making research and data on major global issues like poverty, disease, hunger, climate change, war, existential risks, and inequality accessible and understandable to promote progress.
+
+On this short data set, the variables contained are the following:
+
+```{r reading the data}
+raw_data <- read.csv("number-of-internet-users.csv",header = TRUE)
+```
+
+```{r Arranging the names for presentation}
+raw_data <- raw_data %>%
+        rename(Country = Entity,
+               Country_Code = Code,
+               Number_of_Internet_Users = Number.of.Internet.users)
+
+```
+
+
+
+* **Variables:**
+
+
+
+
+
+
+
 
 ## Including Plots
 

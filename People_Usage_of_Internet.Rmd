@@ -41,7 +41,7 @@ Given that technological advancements are often first adopted in developed count
 #### Data set introduction:
 
 
-The data set extracted form [Our World in Data](https://ourworldindata.org/internet) (For the citation, please see the last part of this work).
+The data set extracted from [Our World in Data](https://ourworldindata.org/internet) (For the citation, please see the last part of this work).
 This is an organisation that focuses on making research and data on major global issues like poverty, disease, hunger, climate change, war, existential risks, and inequality accessible and understandable to promote progress.
 
 On this short data set, the variables contained are the following:

@@ -29,6 +29,7 @@ library(ggplot2)
 library(scales)
 library(RColorBrewer)
 library(viridis)
+library(htmltools)
 
 ```
 
@@ -296,9 +297,11 @@ kable(us_canada_stats_per_year,
 
 ```{r}
 # Display tables side by side
-htmltools::tagList(
-  htmltools::div(style = "display: inline-block; width: 49%;", LA_table),
-  htmltools::div(style = "display: inline-block; width: 49%;", USA_CA_table)
+# Display tables side by side
+div(
+  style = "display: flex; justify-content: space-between;",
+  div(style = "width: 45%;", HTML(LA_table)),
+  div(style = "width: 45%;", HTML(USA_CA_table))
 )
 ```
 

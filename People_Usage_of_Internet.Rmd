@@ -14,7 +14,7 @@ output:
 ```{r setup, include=FALSE}
 # Setting up Global Instructions:
 knitr::opts_chunk$set(echo = TRUE, include = TRUE, message = FALSE, warning = FALSE)
-options(scipen = 999)
+options(scipen = 999, digits = 10)
 ```
 
 
@@ -168,8 +168,9 @@ Latin_America <- raw_data %>%
 
 
 ```{r Looking at the Latin America behaviour, echo=TRUE, fig.width=10}
-# Define a subtle color palette
-custom_palette <- c("aquamarine", "azure", "beige", "bisque", "blue",
+# Defining my own color palette
+
+custom_palette <- c("aquamarine", "darkgoldenrod4", "navyblue", "darkorchid2", "blue",
                     "blueviolet", "brown", "burlywood", "cadetblue", "chartreuse",
                     "chocolate", "coral", "cornflowerblue", "cyan", "darkgoldenrod",
                     "darkgreen", "darkkhaki", "darkmagenta", "darkorange", "darkred",
@@ -189,6 +190,41 @@ Latino_ind_stats <- ggplot(Latin_America, aes(x = Year, y = Number_of_Internet_U
 # Display the plot
 print(Latino_ind_stats)
 
+```
+
+As expected, the growth is exponential. Nonetheless, it is very interesting to see how Brazil is the country with the biggest pivot upwards from starting from the year 2000.
+Followed by Mexico, which is the second country with the highest amount of users on the Internet. The rest of the Latin American countries tend to behave in the same way.
+
+As previously mentioned, in order to perform a general analysis as a group, I will use the mean of users per year for the group.
+
+```{r Grouping and Calculating Mean, echo=TRUE, fig.align='center'}
+
+# Grouping the data by year and calculate the mean, min, and max number of internet users per year
+
+latin_america_stats_per_year <- Latin_America %>%
+  group_by(Year) %>%
+  summarise(
+    Mean_Internet_Users = mean(Number_of_Internet_Users, na.rm = TRUE),
+    Min_Internet_Users = min(Number_of_Internet_Users, na.rm = TRUE),
+    Max_Internet_Users = max(Number_of_Internet_Users, na.rm = TRUE)
+  )
+
+# Format numbers with commas
+latin_america_stats_per_year <- latin_america_stats_per_year %>%
+  mutate(
+    Mean_Internet_Users = formatC(Mean_Internet_Users, format = "f", big.mark = ",", digits = 0),
+    Min_Internet_Users = formatC(Min_Internet_Users, format = "f", big.mark = ",", digits = 0),
+    Max_Internet_Users = formatC(Max_Internet_Users, format = "f", big.mark = ",", digits = 0)
+  )
+
+
+# Creating a table by using kable with a caption
+
+kable(latin_america_stats_per_year, 
+      col.names = c("Year", "Mean Internet Users", "Min Internet Users", "Max Internet Users"),
+      caption = "Summary of Internet Users in Latin American Countries by Year",
+      format = "html") %>%
+  kable_styling(position = "center", full_width = FALSE, bootstrap_options = c("striped", "hover"))
 ```
 
 
